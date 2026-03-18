@@ -1,3 +1,4 @@
+console.log("MAIN VERSION NEW");
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const userFromURL = params.get("user");
