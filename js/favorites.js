@@ -8,10 +8,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/favorites/${username}`);
+    const res = await fetch(
+      `https://manga-site-er5s.onrender.com/favorites/${username}`,
+    );
     const favIds = await res.json();
 
-    const mangasRes = await fetch("http://localhost:3000/mangas");
+    const mangasRes = await fetch(
+      "https://manga-site-er5s.onrender.com/mangas",
+    );
     const mangas = await mangasRes.json();
 
     const favorites = mangas.filter((m) => favIds.includes(m._id));
@@ -23,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.className = "manga-card";
 
       card.innerHTML = `
-        <img src="http://localhost:3000${manga.cover}" />
+        <img src="https://manga-site-er5s.onrender.com${manga.cover}" />
 
         <div class="card-info">
           <h4>${manga.title}</h4>

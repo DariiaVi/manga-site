@@ -10,10 +10,10 @@ async function loadCollections() {
     return;
   }
 
-  const res = await fetch(`http://localhost:3000/collections/${username}`);
+  const res = await fetch(`https://manga-site-er5s.onrender.com/${username}`);
   const collections = await res.json();
 
-  const mangaRes = await fetch("http://localhost:3000/mangas");
+  const mangaRes = await fetch("https://manga-site-er5s.onrender.com/mangas");
   const mangas = await mangaRes.json();
 
   container.innerHTML = "";
@@ -37,7 +37,7 @@ async function loadCollections() {
       card.className = "manga-card";
 
       card.innerHTML = `
-        <img src="http://localhost:3000${manga.cover}" />
+        <img src="https://manga-site-er5s.onrender.com${manga.cover}" />
 
         <div class="card-info">
           <h4>${manga.title}</h4>
@@ -65,7 +65,7 @@ createBtn.addEventListener("click", async () => {
 
   if (!name) return;
 
-  await fetch("http://localhost:3000/collections/create", {
+  await fetch("https://manga-site-er5s.onrender.com/collections/create", {
     method: "POST",
 
     headers: {

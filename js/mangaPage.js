@@ -1,4 +1,4 @@
-const API = "http://localhost:3000";
+const API = "https://manga-site-er5s.onrender.com";
 
 const params = new URLSearchParams(window.location.search);
 const mangaId = params.get("id");

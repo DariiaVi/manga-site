@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const username = localStorage.getItem("username");
 
-  const res = await fetch(`http://localhost:3000/reading/${username}`);
+  const res = await fetch(
+    `https://manga-site-er5s.onrender.com/reading/${username}`,
+  );
   const list = await res.json();
 
-  const mangasRes = await fetch("http://localhost:3000/mangas");
+  const mangasRes = await fetch("https://manga-site-er5s.onrender.com/mangas");
   const mangas = await mangasRes.json();
 
   const containers = {
@@ -22,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     card.className = "manga-card";
 
     card.innerHTML = `
-   <img src="http://localhost:3000${manga.cover}">
+   <img src="https://manga-site-er5s.onrender.com${manga.cover}">
 
    <div class="card-info">
 
@@ -75,7 +77,7 @@ onchange="updateProgress('${manga._id}', this.value)"
 async function updateStatus(mangaId, status) {
   const username = localStorage.getItem("username");
 
-  await fetch("http://localhost:3000/reading/update", {
+  await fetch("https://manga-site-er5s.onrender.com/reading/update", {
     method: "POST",
 
     headers: {
@@ -94,7 +96,7 @@ async function updateStatus(mangaId, status) {
 async function updateProgress(mangaId, progress) {
   const username = localStorage.getItem("username");
 
-  await fetch("http://localhost:3000/reading/progress", {
+  await fetch("https://manga-site-er5s.onrender.com/reading/progress", {
     method: "POST",
 
     headers: {

@@ -13,11 +13,14 @@ if (loginBtn) {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await fetch(
+        "https://manga-site-er5s.onrender.com/api/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        },
+      );
 
       const data = await res.json();
 
@@ -27,7 +30,7 @@ if (loginBtn) {
       }
 
       localStorage.setItem("username", data.username);
-      window.location.href = "http://localhost:5173/";
+      window.location.href = "https://manga-site-er5s.onrender.com/";
     } catch (err) {
       alert("Ошибка соединения с сервером");
       console.error(err);

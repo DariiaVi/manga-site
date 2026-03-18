@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (randomBtn) {
     randomBtn.addEventListener("click", async () => {
       try {
-        const res = await fetch("http://localhost:3000/mangas");
+        const res = await fetch("https://manga-site-er5s.onrender.com/mangas");
         const mangas = await res.json();
 
         if (!mangas.length) return;
@@ -168,7 +168,9 @@ document.addEventListener("DOMContentLoaded", () => {
     heroRead.addEventListener("click", async () => {
       const mangaId = "69aa909613e31010a5f1a317";
 
-      const res = await fetch(`http://localhost:3000/chapters/${mangaId}`);
+      const res = await fetch(
+        `https://manga-site-er5s.onrender.com/chapters/${mangaId}`,
+      );
       const chapters = await res.json();
 
       if (chapters.length > 0) {

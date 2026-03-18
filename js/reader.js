@@ -8,7 +8,9 @@ const container = document.getElementById("pagesContainer");
 const indicator = document.getElementById("pageIndicator");
 
 async function loadPages() {
-  const res = await fetch(`http://localhost:3000/pages/${chapterId}`);
+  const res = await fetch(
+    `https://manga-site-er5s.onrender.com/pages/${chapterId}`,
+  );
   const data = await res.json();
 
   pages = (data.pages || []).sort((a, b) =>
@@ -29,7 +31,7 @@ function renderPage() {
 
   const img = document.createElement("img");
 
-  img.src = "http://localhost:3000" + pages[currentPage];
+  img.src = "https://manga-site-er5s.onrender.com" + pages[currentPage];
 
   img.style.maxWidth = "900px";
   img.style.width = "100%";

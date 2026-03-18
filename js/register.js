@@ -14,13 +14,16 @@ if (registerBtn) {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://manga-site-er5s.onrender.com/api/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, username, password }),
         },
-        body: JSON.stringify({ email, username, password }),
-      });
+      );
 
       const data = await res.json();
 

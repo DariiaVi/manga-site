@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const searchInput = document.getElementById("searchInput");
 
   try {
-    const res = await fetch("http://localhost:3000/mangas");
+    const res = await fetch("https://manga-site-er5s.onrender.com/mangas");
     window.mangas = await res.json();
 
     window.mangas.forEach((manga) => {
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.dataset.type = manga.type.toLowerCase();
 
       card.innerHTML = `
-        <img src="http://localhost:3000${manga.cover}" alt="${manga.title}" />
+        <img src="https://manga-site-er5s.onrender.com${manga.cover}" alt="${manga.title}" />
 
         <div class="card-info">
           <h4>${manga.title}</h4>
