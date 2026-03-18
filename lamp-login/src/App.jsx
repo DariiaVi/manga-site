@@ -76,7 +76,7 @@ export default function App() {
   }
 
   async function handleLogin() {
-    const res = await fetch("http://localhost:3000/api/login", {
+    const res = await fetch("https://manga-site-er5s.onrender.com/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,16 +103,19 @@ export default function App() {
 
   async function handleRegister() {
     try {
-      const res = await fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://manga-site-er5s.onrender.com/api/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
         },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+      );
 
       const data = await res.json();
 
