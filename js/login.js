@@ -6,8 +6,7 @@ if (loginBtn) {
     const password = document.getElementById("password").value.trim();
 
     console.log("LOGIN SEND:", { username, password });
-    console.log("SAVE USER:", data.username);
-    localStorage.setItem("username", data.username);
+
     if (!username || !password) {
       alert("Заполни все поля");
       return;
@@ -18,8 +17,13 @@ if (loginBtn) {
         "https://manga-site-er5s.onrender.com/api/login",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
         },
       );
 
@@ -30,7 +34,12 @@ if (loginBtn) {
         return;
       }
 
+      console.log("SAVE USER:", data.username);
+
       localStorage.setItem("username", data.username);
+
+      alert("Вход выполнен");
+
       window.location.href = "/";
     } catch (err) {
       alert("Ошибка соединения с сервером");

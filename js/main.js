@@ -207,5 +207,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
-console.log("SAVE USER:", data.username);
-localStorage.setItem("username", data.username);
