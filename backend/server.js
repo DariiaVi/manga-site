@@ -2,10 +2,15 @@ import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import cors from "cors";
-
 import multer from "multer";
 import User from "./User.js";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 dotenv.config();
 
 mongoose.connect(process.env.MONGO_URL);
