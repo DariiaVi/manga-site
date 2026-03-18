@@ -36,8 +36,7 @@ app.use(express.json());
 STATIC FILES
 ====================== */
 
-app.use("/images", express.static("images"));
-
+app.use("/images", express.static(path.join(__dirname, "images")));
 /* ======================
 DATABASE
 ====================== */
