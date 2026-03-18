@@ -10,7 +10,9 @@ async function loadCollections() {
     return;
   }
 
-  const res = await fetch(`https://manga-site-er5s.onrender.com/${username}`);
+  const res = await fetch(
+    `https://manga-site-er5s.onrender.com/collections/${username}`,
+  );
   const collections = await res.json();
 
   const mangaRes = await fetch("https://manga-site-er5s.onrender.com/mangas");

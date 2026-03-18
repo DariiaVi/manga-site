@@ -25,6 +25,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5500",
       "http://127.0.0.1:5500",
+      "https://manga-site-er5s.onrender.com",
     ],
     credentials: true,
   }),
@@ -55,7 +56,7 @@ UPLOAD COVER
 
 const coverStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images/covers");
+    cb(null, path.join(__dirname, "images/covers"));
   },
   filename: function (req, file, cb) {
     const unique = Date.now() + "-" + file.originalname;
@@ -71,7 +72,7 @@ UPLOAD PAGES
 
 const pagesStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images/pages");
+    cb(null, path.join(__dirname, "images/pages"));
   },
   filename: function (req, file, cb) {
     const unique = Date.now() + "-" + file.originalname;

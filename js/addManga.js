@@ -4,7 +4,7 @@ form.addEventListener("submit", async (e) => {
 
   const formData = new FormData(form);
 
-  const res = await fetch("https://manga-site-er5s.onrender.com/add", {
+  const res = await fetch("https://manga-site-er5s.onrender.com/mangas/add", {
     method: "POST",
     body: formData,
   });
