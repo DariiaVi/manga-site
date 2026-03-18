@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Мой лист</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="main">
+    <div class="mylist-page">
+      <h1 class="mylist-title">Мой лист</h1>
+      <div class="profile-stats">
+        <div class="stat">
+          <span id="readingCount">0</span>
+          <p>Читаю</p>
+        </div>
+
+        <div class="stat">
+          <span id="planningCount">0</span>
+          <p>Планирую</p>
+        </div>
+
+        <div class="stat">
+          <span id="completedCount">0</span>
+          <p>Завершено</p>
+        </div>
+      </div>
+      <div class="list-section">
+        <h2>Читаю</h2>
+        <div class="cards" id="reading"></div>
+        <h2>Планирую</h2>
+        <div class="cards" id="planning"></div>
+
+        <h2>Завершено</h2>
+        <div class="cards" id="completed"></div>
+        <h2>Брошено</h2>
+        <div class="cards" id="dropped"></div>
+      </div>
+    </div>
+
+    <script src="js/mylist.js"></script>
+  </body>
+</html>

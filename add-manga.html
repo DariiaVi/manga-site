@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Добавить мангу</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="main">
+    <h1>Добавить мангу</h1>
+
+    <form id="mangaForm" enctype="multipart/form-data" class="add-manga-form">
+      <input type="text" name="title" placeholder="Название манги" required />
+
+      <select name="type">
+        <option value="манга">Манга</option>
+        <option value="манхва">Манхва</option>
+        <option value="комикс">Комикс</option>
+      </select>
+
+      <input type="text" name="genres" placeholder="Жанры (через запятую)" />
+
+      <textarea
+        name="description"
+        placeholder="Описание манги"
+        rows="6"
+      ></textarea>
+
+      <label class="file-upload">
+        Обложка манги
+
+        <input type="file" name="cover" accept="image/*" required />
+      </label>
+
+      <button type="submit" class="btn-primary">Добавить мангу</button>
+    </form>
+
+    <script src="js/addManga.js"></script>
+  </body>
+</html>

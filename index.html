@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Страничка манги</title>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="logo">Mangasite</h2>
+      <nav>
+        <a href="profile.html" id="profileLinkAside">Профиль</a>
+        <a href="favorites.html">Избранное</a>
+        <a href="mylist.html">Мой лист</a>
+        <a href="#">Загрузки</a>
+        <a href="#">Настройки</a>
+      </nav>
+      <a href="add-manga.html">➕ Добавить мангу</a>
+      <a href="add-chapter.html">📖 Добавить главу</a>
+      <nav>
+  
+      <section class="filters">
+        <h3 class="filters-title">Тип</h3>
+        <label class="filter-item">
+          <input type="checkbox" value="манга" />
+          Манга
+        </label>
+        <label class="filter-item">
+          <input type="checkbox" value="манхва" />
+          Манхва
+        </label>
+        <label class="filter-item">
+          <input type="checkbox" value="комикс" />
+          Комикс
+        </label>
+        <h3 class="filters-title" style="margin-top:20px;">Жанры</h3>
+          
+          <label class="filter-item">
+            <input type="checkbox" value="экшен" class="genre-filter" />
+            Экшен
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="фэнтези" class="genre-filter" />
+            Фэнтези
+          </label>
+
+         <label class="filter-item">
+            <input type="checkbox" value="романтика" class="genre-filter" />
+            Романтика
+          </label>
+
+         <label class="filter-item">
+            <input type="checkbox" value="ужасы" class="genre-filter" />
+            Ужасы
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="мистика" class="genre-filter" />
+            Мистика
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="сверхъестественное" class="genre-filter" />
+            Сверхъестественное
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="комедия" class="genre-filter" />
+            Комедия
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="драма" class="genre-filter" />
+            Драма
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="психология" class="genre-filter" />
+            Психология
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="боевик" class="genre-filter" />
+            Боевик
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="триллер" class="genre-filter" />
+            Триллер
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="исторический" class="genre-filter" />
+            Исторический
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="школа" class="genre-filter" />
+            Школа
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="дарк-фэнтези" class="genre-filter" />
+            Дарк-фэнтези
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="сёнэн" class="genre-filter" />
+            Сёнэн
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="криминал" class="genre-filter" />
+            Криминал
+          </label>
+
+          <label class="filter-item">
+            <input type="checkbox" value="тёмное фэнтези" class="genre-filter"/>
+            Тёмное фэнтези
+          </label>
+        
+        <button id="resetTypeFilters" class="filter-reset">сбросить</button>
+        <button id="randomMangaBtn" class="filter-reset">🎲 Случайная манга</button>
+      </section>
+    </aside>
+    <!-- Main content -->
+    <main class="main">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">Mangasite</div>
+
+        <div class="top-search">
+          <input
+            id="mainSearch"
+            class="search-input"
+            type="text"
+            placeholder="Поиск манги..."
+          />
+
+          <div class="search-buttons">
+            <button id="searchBtn" class="search-btn">Найти</button>
+
+            <button id="resetFilters" class="search-btn">Сброс</button>
+          </div>
+        </div>
+        <div class="auth">
+          <div class="lamp" id="lamp">
+            <div class="lamp-body"></div>
+            <div class="lamp-chain"></div>
+            <div class="lamp-ball"></div>
+          </div>
+          <input
+            type="text"
+            id="usernameInput"
+            placeholder="Имя пользователя"
+          />
+
+          <button id="loginBtn" type="button">Войти</button>
+          <button id="registerBtnMain" type="button">Зарегистрироваться</button>
+        </div>
+      </header>
+      <!-- Hero section -->
+      <div class="hero">
+        <div class="hero-content">
+          <h1 id="heroTitle">Jujutsu Kaisen</h1>
+
+          <div class="hero-buttons">
+            <a href="reader.html?chapter=69aa951c13e31010a5f1a32f" class="btn">
+              Прочитать сейчас
+            </a>
+            <a href="manga.html?id=69aa909613e31010a5f1a317" class="btn">
+              Узнать больше
+            </a>
+
+            <button id="continueReadingBtn" class="btn">
+              Продолжить чтение
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Hero section -->
+      
+      <!-- Continue watching -->
+      <section class="continue">
+        <h2>Continue Reading</h2>
+        <div class="cards" id="mangaContainer"></div>
+      
+    </main>
+    <script src="js/main.js"></script>
+    
+    <script src="js/generateCards.js"></script>
+    
+    <script src="js/lamp.js"></script>
+  </body>
+</html>

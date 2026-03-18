@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Добавить главу</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="main">
+    <h1>📖 Добавить главу</h1>
+
+    <form id="chapterForm" enctype="multipart/form-data" class="add-manga-form">
+      <label>Манга</label>
+
+      <select name="mangaId" id="mangaSelect"></select>
+
+      <input type="number" name="number" placeholder="Номер главы" required />
+
+      <input type="text" name="title" placeholder="Название главы" />
+
+      <label class="file-upload">
+        Папка со страницами главы
+
+        <input type="file" name="pages" webkitdirectory multiple required />
+      </label>
+
+      <button type="submit" class="btn-primary">Добавить главу</button>
+    </form>
+
+    <script src="js/addChapter.js"></script>
+  </body>
+</html>

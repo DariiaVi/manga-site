@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title id="pageTitle">Манга</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <main class="main">
+      <div class="manga-page">
+        <div class="manga-header">
+          <img id="mangaCover" class="manga-cover" />
+
+          <div class="manga-details">
+            <h1 id="mangaTitle"></h1>
+
+            <div class="manga-meta">
+              <span id="mangaType"></span>
+              <span id="mangaGenres"></span>
+            </div>
+
+            <p id="mangaDescription" class="manga-description"></p>
+
+            <div class="manga-actions">
+              <button id="startReadBtn" class="read-btn">
+                Читать с начала
+              </button>
+
+              <button id="favBtn" class="fav-btn">Добавить в избранное</button>
+              <button onclick="addToCollection()">Добавить в коллекцию</button>
+              <button onclick="addToReading('reading')">
+                Добавить в мой список
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="chapters-title">Список глав</h2>
+
+        <ul id="chapterList" class="chapters-list"></ul>
+      </div>
+    </main>
+
+    <script src="js/mangaPage.js"></script>
+  </body>
+</html>

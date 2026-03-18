@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Профиль</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="profile-page">
+    <div class="profile-page">
+      <div class="profile-banner"></div>
+
+      <div class="profile-info">
+        <img id="avatar" src="backend/images/yu.png" class="profile-avatar" />
+        <input type="file" id="avatarInput" />
+
+        <h2 id="usernameDisplay">Username</h2>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat">
+          <span id="favoritesCount">0</span>
+          <p>Избранное</p>
+        </div>
+
+        <div class="stat">
+          <span>0</span>
+          <p>Прочитано</p>
+        </div>
+
+        <div class="stat">
+          <span>0</span>
+          <p>Комментарии</p>
+        </div>
+      </div>
+
+      <div class="profile-menu">
+        <a href="favorites.html" class="profile-item">⭐ Избранное</a>
+
+        <a href="comments.html" class="profile-item">💬 Комментарии</a>
+
+        <a href="collections.html" class="profile-item">📚 Коллекции</a>
+
+        <a href="history.html" class="profile-item">📖 История чтения</a>
+      </div>
+    </div>
+    <ul id="list"></ul>
+
+    <script src="profile.js"></script>
+  </body>
+</html>

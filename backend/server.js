@@ -1,0 +1,293 @@
+import express from "express";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import cors from "cors";
+
+import multer from "multer";
+import User from "./User.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URL);
+const app = express();
+
+/* ======================
+CORS
+====================== */
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5500",
+      "http://127.0.0.1:5500",
+    ],
+    credentials: true,
+  }),
+);
+
+app.use(express.json());
+
+/* ======================
+STATIC FILES
+====================== */
+
+app.use("/images", express.static("images"));
+
+/* ======================
+DATABASE
+====================== */
+
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB Atlas подключена");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log("MongoDB ошибка:", err);
+});
+
+/* ======================
+UPLOAD COVER
+====================== */
+
+const coverStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images/covers");
+  },
+  filename: function (req, file, cb) {
+    const unique = Date.now() + "-" + file.originalname;
+    cb(null, unique);
+  },
+});
+
+const uploadCover = multer({ storage: coverStorage });
+
+/* ======================
+UPLOAD PAGES
+====================== */
+
+const pagesStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images/pages");
+  },
+  filename: function (req, file, cb) {
+    const unique = Date.now() + "-" + file.originalname;
+    cb(null, unique);
+  },
+});
+
+const uploadPages = multer({ storage: pagesStorage });
+
+/* ======================
+MANGA MODEL
+====================== */
+
+const mangaSchema = new mongoose.Schema({
+  title: String,
+  type: String,
+  genres: [String],
+  description: String,
+  cover: String,
+});
+
+const Manga = mongoose.model("Manga", mangaSchema, "mangas");
+
+/* ======================
+REGISTER
+====================== */
+
+app.post("/api/register", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const existing = await User.findOne({ username });
+
+    if (existing) {
+      return res.status(400).json({
+        message: "Пользователь уже существует",
+      });
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      username,
+      password: hash,
+      favorites: [],
+      readingList: [],
+      collections: [],
+    });
+
+    await user.save();
+
+    res.json({ message: "Регистрация успешна" });
+  } catch (error) {
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+/* ======================
+LOGIN
+====================== */
+
+app.post("/api/login", async (req, res) => {
+  try {
+    const username = req.body.username.trim();
+    const password = req.body.password.trim();
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Пользователь не найден",
+      });
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (!valid) {
+      return res.status(401).json({
+        message: "Неверный пароль",
+      });
+    }
+
+    res.json({
+      message: "Вход выполнен",
+      username: user.username,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+/* ======================
+ADD MANGA
+====================== */
+
+app.post("/mangas/add", uploadCover.single("cover"), async (req, res) => {
+  try {
+    const { title, type, genres, description } = req.body;
+
+    const coverPath = "/images/covers/" + req.file.filename;
+
+    const manga = new Manga({
+      title,
+      type,
+      genres: genres.split(","),
+      description,
+      cover: coverPath,
+    });
+
+    await manga.save();
+
+    res.json({ message: "Манга добавлена" });
+  } catch (err) {
+    res.status(500).json({ error: "Ошибка добавления манги" });
+  }
+});
+
+/* ======================
+GET ALL MANGAS
+====================== */
+
+app.get("/mangas", async (req, res) => {
+  try {
+    const mangas = await Manga.find();
+    res.json(mangas);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка загрузки манги" });
+  }
+});
+
+/* ======================
+ADD CHAPTER
+====================== */
+
+app.post("/chapters/add", uploadPages.array("pages", 200), async (req, res) => {
+  try {
+    const { mangaId, number, title } = req.body;
+
+    const pages = req.files
+      .map((file) => ({
+        path: "/" + file.path.replace(/\\/g, "/"),
+        name: file.originalname,
+      }))
+      .sort((a, b) => {
+        const numA = parseInt(a.name.match(/\d+/));
+        const numB = parseInt(b.name.match(/\d+/));
+        return numA - numB;
+      })
+      .map((file) => file.path);
+    const chapter = {
+      mangaId,
+      number,
+      title,
+      pages,
+    };
+
+    await mongoose.connection.collection("pages").insertOne(chapter);
+
+    res.json({ message: "Глава добавлена" });
+  } catch (err) {
+    res.status(500).json({ error: "Ошибка загрузки главы" });
+  }
+});
+
+/* ======================
+GET CHAPTER PAGES
+====================== */
+
+app.get("/pages/:chapterId", async (req, res) => {
+  try {
+    const chapterId = req.params.chapterId;
+
+    const chapter = await mongoose.connection
+      .collection("pages")
+      .findOne({ _id: new mongoose.Types.ObjectId(chapterId) });
+
+    if (!chapter) {
+      return res.json({ pages: [] });
+    }
+
+    res.json(chapter);
+  } catch (err) {
+    res.status(500).json({ error: "Ошибка загрузки страниц" });
+  }
+});
+/* ======================
+GET CHAPTERS BY MANGA
+====================== */
+
+app.get("/chapters/:mangaId", async (req, res) => {
+  try {
+    const mangaId = req.params.mangaId;
+
+    const chapters = await mongoose.connection
+      .collection("pages")
+      .find({ mangaId })
+      .sort({ number: 1 })
+      .toArray();
+
+    res.json(chapters);
+  } catch (err) {
+    res.status(500).json({ error: "Ошибка загрузки глав" });
+  }
+});
+
+/* ======================
+TEST
+====================== */
+
+app.get("/test", (req, res) => {
+  res.json({ message: "server works" });
+});
+
+/* ======================
+START SERVER
+====================== */
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
