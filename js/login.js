@@ -6,7 +6,8 @@ if (loginBtn) {
     const password = document.getElementById("password").value.trim();
 
     console.log("LOGIN SEND:", { username, password });
-
+    console.log("SAVE USER:", data.username);
+    localStorage.setItem("username", data.username);
     if (!username || !password) {
       alert("Заполни все поля");
       return;
@@ -30,7 +31,7 @@ if (loginBtn) {
       }
 
       localStorage.setItem("username", data.username);
-      window.location.href = "https://manga-site-er5s.onrender.com/";
+      window.location.href = "/";
     } catch (err) {
       alert("Ошибка соединения с сервером");
       console.error(err);
