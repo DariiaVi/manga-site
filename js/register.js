@@ -34,7 +34,7 @@ if (registerBtn) {
 
       alert("Регистрация успешна!");
 
-      window.location.href = "login.html";
+      window.location.href = "https://lamp-login-dl7a.vercel.app";
     } catch (err) {
       alert("Ошибка соединения с сервером");
       console.error(err);
