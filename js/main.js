@@ -76,19 +76,30 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginBtn) loginBtn.style.display = "none";
     if (registerBtn) registerBtn.style.display = "none";
 
-    const userBox = document.createElement("div");
-    userBox.className = "user-box";
+    const authControls = document.getElementById("authControls");
+    const userBox = document.getElementById("userBox");
 
-    const span = document.createElement("span");
-    span.textContent = `Привет, ${username} 💜`;
+    if (username && authBlock) {
+      // ❌ скрываем кнопки входа
+      if (authControls) authControls.style.display = "none";
 
-    const logoutBtn = document.createElement("button");
-    logoutBtn.id = "logoutBtn";
-    logoutBtn.textContent = "Выйти";
+      // ✅ вставляем пользователя в уже существующий блок
+      if (userBox) {
+        userBox.innerHTML = `
+      <span class="user-name">Привет, ${username} 💜</span>
+      <button id="logoutBtn">Выйти</button>
+    `;
+      }
 
-    userBox.appendChild(span);
-    userBox.appendChild(logoutBtn);
-    authBlock.appendChild(userBox);
+      if (profileLinkAside) profileLinkAside.style.display = "block";
+    } else {
+      // ✅ показываем кнопки входа обратно
+      if (authControls) authControls.style.display = "block";
+
+      if (userBox) userBox.innerHTML = "";
+
+      if (profileLinkAside) profileLinkAside.style.display = "none";
+    }
     if (profileLinkAside) profileLinkAside.style.display = "block";
   } else {
     if (profileLinkAside) profileLinkAside.style.display = "none";
@@ -188,3 +199,12 @@ const user = localStorage.getItem("username");
 if (user) {
   console.log("Ты вошла как:", user);
 }
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "logoutBtn") {
+    console.log("LOGOUT CLICKED ✅");
+
+    localStorage.removeItem("username");
+
+    window.location.href = "/";
+  }
+});
