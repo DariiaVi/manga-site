@@ -98,7 +98,7 @@ export default function App() {
     localStorage.setItem("username", data.username);
 
     /* переход на сайт */
-    window.location.href = `https://lamp-login-dl7a.vercel.app/?user=${data.username}`;
+    window.location.href = `https://manga-site-er5s.onrender.com/?user=${data.username}`;
   }
 
   async function handleRegister() {
