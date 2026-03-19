@@ -18,8 +18,8 @@
         <a href="#">Загрузки</a>
         <a href="#">Настройки</a>
       </nav>
-      <a href="add-manga.html">➕ Добавить мангу</a>
-      <a href="add-chapter.html">📖 Добавить главу</a>
+      <a href="add-manga.html">Добавить мангу</a>
+      <a href="add-chapter.html">Добавить главу</a>
       <nav>
   
       <section class="filters">
@@ -148,20 +148,28 @@
           </div>
         </div>
         <div class="auth">
-          <div class="lamp" id="lamp">
-            <div class="lamp-body"></div>
-            <div class="lamp-chain"></div>
-            <div class="lamp-ball"></div>
-          </div>
-          <input
-            type="text"
-            id="usernameInput"
-            placeholder="Имя пользователя"
-          />
+  <!-- ЛАМПА -->
+  <div class="lamp" id="lamp">
+    <div class="lamp-body"></div>
+    <div class="lamp-chain"></div>
+    <div class="lamp-ball"></div>
+  </div>
 
-          <button id="loginBtn" type="button">Войти</button>
-          <button id="registerBtnMain" type="button">Зарегистрироваться</button>
-        </div>
+  <!-- КНОПКИ ДО ЛОГИНА -->
+  <div id="authControls">
+    <input
+      type="text"
+      id="usernameInput"
+      placeholder="Имя пользователя"
+    />
+
+    <button id="loginBtn" type="button">Войти</button>
+    <button id="registerBtnMain" type="button">Зарегистрироваться</button>
+  </div>
+
+  <!-- БЛОК ПОСЛЕ ЛОГИНА -->
+  <div id="userBox"></div>
+</div>
       </header>
       <!-- Hero section -->
       <div class="hero">
