@@ -7,40 +7,20 @@ import User from "./User.js";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL);
 const app = express();
+const PORT = process.env.PORT || 10000;
 
-/* ======================
-CORS
-====================== */
-
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5500",
-      "http://127.0.0.1:5500",
-      "https://manga-site-er5s.onrender.com",
-    ],
-    credentials: true,
-  }),
-);
-
-app.use(express.json());
-
-/* ======================
-STATIC FILES
-====================== */
-
-app.use("/images", express.static(path.join(__dirname, "images")));
 /* ======================
 DATABASE
 ====================== */
+
+mongoose.connect(process.env.MONGO_URL);
 
 mongoose.connection.on("connected", () => {
   console.log("MongoDB Atlas подключена");
@@ -51,16 +31,34 @@ mongoose.connection.on("error", (err) => {
 });
 
 /* ======================
+CORS (ВАЖНО)
+====================== */
+
+app.use(
+  cors({
+    origin: "https://lamp-login-dl7a.vercel.app",
+    credentials: true,
+  }),
+);
+app.use(express.json());
+
+/* ======================
+STATIC FILES
+====================== */
+
+app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(express.static(path.join(__dirname, "..")));
+
+/* ======================
 UPLOAD COVER
 ====================== */
 
 const coverStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "images/covers"));
   },
-  filename: function (req, file, cb) {
-    const unique = Date.now() + "-" + file.originalname;
-    cb(null, unique);
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
@@ -71,12 +69,11 @@ UPLOAD PAGES
 ====================== */
 
 const pagesStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "images/pages"));
   },
-  filename: function (req, file, cb) {
-    const unique = Date.now() + "-" + file.originalname;
-    cb(null, unique);
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
@@ -222,6 +219,7 @@ app.post("/chapters/add", uploadPages.array("pages", 200), async (req, res) => {
         return numA - numB;
       })
       .map((file) => file.path);
+
     const chapter = {
       mangaId,
       number,
@@ -243,32 +241,27 @@ GET CHAPTER PAGES
 
 app.get("/pages/:chapterId", async (req, res) => {
   try {
-    const chapterId = req.params.chapterId;
-
     const chapter = await mongoose.connection
       .collection("pages")
-      .findOne({ _id: new mongoose.Types.ObjectId(chapterId) });
+      .findOne({ _id: new mongoose.Types.ObjectId(req.params.chapterId) });
 
-    if (!chapter) {
-      return res.json({ pages: [] });
-    }
+    if (!chapter) return res.json({ pages: [] });
 
     res.json(chapter);
   } catch (err) {
     res.status(500).json({ error: "Ошибка загрузки страниц" });
   }
 });
+
 /* ======================
 GET CHAPTERS BY MANGA
 ====================== */
 
 app.get("/chapters/:mangaId", async (req, res) => {
   try {
-    const mangaId = req.params.mangaId;
-
     const chapters = await mongoose.connection
       .collection("pages")
-      .find({ mangaId })
+      .find({ mangaId: req.params.mangaId })
       .sort({ number: 1 })
       .toArray();
 
@@ -287,17 +280,17 @@ app.get("/test", (req, res) => {
 });
 
 /* ======================
-START SERVER
+ROOT
 ====================== */
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
-});
-app.use(express.static(path.join(__dirname, "..")));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "index.html"));
 });
-app.listen(PORT, () => {
+
+/* ======================
+START SERVER
+====================== */
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
