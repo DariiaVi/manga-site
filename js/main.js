@@ -1,4 +1,5 @@
-console.log("MAIN VERSION NEW");
+console.log("MAIN VERSION FIXED");
+
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const userFromURL = params.get("user");
@@ -6,7 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (userFromURL) {
     localStorage.setItem("username", userFromURL);
   }
+
   const username = localStorage.getItem("username");
+
+  /* ===== ФИЛЬТРЫ ===== */
+
   const genreFilters = document.querySelectorAll(".genre-filter");
 
   genreFilters.forEach((filter) => {
@@ -53,16 +58,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ===== ШАПКА / АВТОЛОГИН ===== */
+  /* ===== АВТОЛОГИН (ИСПРАВЛЕНО) ===== */
 
   const authBlock = document.querySelector(".auth");
   const profileLinkAside = document.getElementById("profileLinkAside");
 
+  const usernameInput = document.getElementById("usernameInput");
+  const loginBtn = document.getElementById("loginBtn");
+  const registerBtn = document.getElementById("registerBtnMain");
+
   if (username && authBlock) {
-    authBlock.innerHTML = `
+    // ❗ НИЧЕГО НЕ УДАЛЯЕМ (лампа остаётся)
+
+    if (usernameInput) usernameInput.style.display = "none";
+    if (loginBtn) loginBtn.style.display = "none";
+    if (registerBtn) registerBtn.style.display = "none";
+
+    const userInfo = document.createElement("div");
+    userInfo.className = "user-box";
+
+    userInfo.innerHTML = `
       <span class="user-name">Привет, ${username} 💜</span>
       <button id="logoutBtn">Выйти</button>
     `;
+
+    authBlock.appendChild(userInfo);
 
     const logoutBtn = document.getElementById("logoutBtn");
 
@@ -81,9 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ===== НАВИГАЦИЯ ===== */
-
-  const loginBtn = document.getElementById("loginBtn");
-  const registerBtn = document.getElementById("registerBtnMain");
 
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
@@ -108,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cards.forEach((card) => {
       const title = card.querySelector("h4").textContent.toLowerCase();
-
       card.style.display = title.includes(search) ? "" : "none";
     });
   }
@@ -135,9 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (searchInput) searchInput.value = "";
 
-      const cards = document.querySelectorAll(".manga-card");
-
-      cards.forEach((card) => {
+      document.querySelectorAll(".manga-card").forEach((card) => {
         card.style.display = "";
       });
     });
@@ -153,15 +167,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelectorAll('.filters input[type="checkbox"]')
         .forEach((cb) => (cb.checked = false));
 
-      const cards = document.querySelectorAll(".manga-card");
-
-      cards.forEach((card) => {
+      document.querySelectorAll(".manga-card").forEach((card) => {
         card.style.display = "";
       });
     });
   }
 
-  /* ===== HERO КНОПКИ ===== */
+  /* ===== HERO ===== */
 
   const heroRead = document.getElementById("heroRead");
 
@@ -172,11 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch(
         `https://manga-site-er5s.onrender.com/chapters/${mangaId}`,
       );
+
       const chapters = await res.json();
 
       if (chapters.length > 0) {
         const firstChapter = chapters[0]._id;
-
         window.location.href = `reader.html?chapter=${firstChapter}`;
       }
     });
@@ -190,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ===== CONTINUE READING ===== */
+  /* ===== CONTINUE ===== */
 
   const continueBtn = document.getElementById("continueReadingBtn");
 
