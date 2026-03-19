@@ -205,6 +205,6 @@ document.addEventListener("click", (e) => {
 
     localStorage.removeItem("username");
 
-    window.location.href = "/";
+    window.location.href = "https://lamp-login-dl7a.vercel.app?logout=true";
   }
 });
