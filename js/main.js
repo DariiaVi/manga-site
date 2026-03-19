@@ -1,5 +1,7 @@
 console.log("MAIN VERSION FINAL FIXED");
-
+document.addEventListener("click", () => {
+  console.log("ANY CLICK 🔥");
+});
 document.addEventListener("DOMContentLoaded", () => {
   /* ===== USER ===== */
 
