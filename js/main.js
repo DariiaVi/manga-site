@@ -1,4 +1,4 @@
-console.log("MAIN VERSION FINAL");
+console.log("MAIN VERSION FINAL FIXED");
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ===== USER ===== */
@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (userFromURL) {
     localStorage.setItem("username", userFromURL);
+
+    // 💥 убираем ?user= из URL (чтобы не логинило заново после logout)
+    window.history.replaceState({}, document.title, "/");
   }
 
   const username = localStorage.getItem("username");
@@ -76,29 +79,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     userBox.innerHTML = `
       <span class="user-name">Привет, ${username} 💜</span>
-      const logoutBtn = document.getElementById("logoutBtn");
-       if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("username");
-      // 💥 обновляем страницу
-    window.location.repload();
-  });
-}
+      <button id="logoutBtn">Выйти</button>
     `;
 
     authBlock.appendChild(userBox);
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("username");
-      window.location.reload();
-    });
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("username");
+
+        // 💥 ПОЛНЫЙ ВЫХОД
+        window.location.href = "/";
+      });
+    }
 
     if (profileLinkAside) profileLinkAside.style.display = "block";
   } else {
     if (profileLinkAside) profileLinkAside.style.display = "none";
   }
 
-  /* ===== ВАЖНО: КНОПКА ЛОГИНА ===== */
+  /* ===== КНОПКИ ВХОДА ===== */
 
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
@@ -192,11 +194,3 @@ const user = localStorage.getItem("username");
 if (user) {
   console.log("Ты вошла как:", user);
 }
-document.addEventListener("click", (e) => {
-  if (e.target.id === "logoutBtn") {
-    console.log("LOGOUT CLICK"); // проверка
-
-    localStorage.removeItem("username");
-    window.location.reload();
-  }
-});
