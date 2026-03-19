@@ -1053,3 +1053,8 @@ body.collections-page {
   font-size: 18px;
   color: white;
 }
+#logoutBtn {
+  position: relative;
+  z-index: 9999;
+  cursor: pointer;
+}

@@ -77,24 +77,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const userBox = document.createElement("div");
     userBox.className = "user-box";
 
-    userBox.innerHTML = `
-      <span class="user-name">Привет, ${username} 💜</span>
-      <button id="logoutBtn">Выйти</button>
-    `;
+    const span = document.createElement("span");
+    span.textContent = `Привет, ${username} 💜`;
 
+    const logoutBtn = document.createElement("button");
+    logoutBtn.id = "logoutBtn";
+    logoutBtn.textContent = "Выйти";
+
+    logoutBtn.addEventListener("click", () => {
+      console.log("CLICK WORKS ✅");
+
+      localStorage.removeItem("username");
+      window.location.href = "/";
+    });
+
+    userBox.appendChild(span);
+    userBox.appendChild(logoutBtn);
     authBlock.appendChild(userBox);
-
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("username");
-
-        // 💥 ПОЛНЫЙ ВЫХОД
-        window.location.href = "/";
-      });
-    }
-
     if (profileLinkAside) profileLinkAside.style.display = "block";
   } else {
     if (profileLinkAside) profileLinkAside.style.display = "none";
