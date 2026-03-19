@@ -35,6 +35,18 @@ function Lamp({ toggle, lightOn }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("logout") === "true") {
+      localStorage.removeItem("username");
+
+      // 💥 редирект обратно на сайт
+      setTimeout(() => {
+        window.location.href = "https://manga-site-er5s.onrender.com";
+      }, 500);
+    }
+  }, []);
   const [lightOn, setLightOn] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [username, setUsername] = useState("");
