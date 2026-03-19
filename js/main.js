@@ -1,6 +1,8 @@
-console.log("MAIN VERSION FIXED");
+console.log("MAIN VERSION FINAL");
 
 document.addEventListener("DOMContentLoaded", () => {
+  /* ===== USER ===== */
+
   const params = new URLSearchParams(window.location.search);
   const userFromURL = params.get("user");
 
@@ -23,9 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .filter((g) => g.checked)
       .map((g) => g.value.toLowerCase());
 
-    const cards = document.querySelectorAll(".manga-card");
-
-    cards.forEach((card) => {
+    document.querySelectorAll(".manga-card").forEach((card) => {
       const genres = card.querySelector(".genres").textContent.toLowerCase();
 
       const match =
@@ -48,8 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!mangas.length) return;
 
-        const randomIndex = Math.floor(Math.random() * mangas.length);
-        const randomManga = mangas[randomIndex];
+        const randomManga = mangas[Math.floor(Math.random() * mangas.length)];
 
         window.location.href = `manga.html?id=${randomManga._id}`;
       } catch (error) {
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ===== АВТОЛОГИН (ИСПРАВЛЕНО) ===== */
+  /* ===== АВТОЛОГИН ===== */
 
   const authBlock = document.querySelector(".auth");
   const profileLinkAside = document.getElementById("profileLinkAside");
@@ -68,49 +67,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const registerBtn = document.getElementById("registerBtnMain");
 
   if (username && authBlock) {
-    // ❗ НИЧЕГО НЕ УДАЛЯЕМ (лампа остаётся)
-
     if (usernameInput) usernameInput.style.display = "none";
     if (loginBtn) loginBtn.style.display = "none";
     if (registerBtn) registerBtn.style.display = "none";
 
-    const userInfo = document.createElement("div");
-    userInfo.className = "user-box";
+    const userBox = document.createElement("div");
+    userBox.className = "user-box";
 
-    userInfo.innerHTML = `
+    userBox.innerHTML = `
       <span class="user-name">Привет, ${username} 💜</span>
       <button id="logoutBtn">Выйти</button>
     `;
 
-    authBlock.appendChild(userInfo);
+    authBlock.appendChild(userBox);
 
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    logoutBtn.addEventListener("click", () => {
+    document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("username");
       window.location.reload();
     });
 
-    if (profileLinkAside) {
-      profileLinkAside.style.display = "block";
-    }
+    if (profileLinkAside) profileLinkAside.style.display = "block";
   } else {
-    if (profileLinkAside) {
-      profileLinkAside.style.display = "none";
-    }
+    if (profileLinkAside) profileLinkAside.style.display = "none";
   }
 
-  /* ===== НАВИГАЦИЯ ===== */
+  /* ===== ВАЖНО: КНОПКА ЛОГИНА ===== */
 
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
-      window.location.href = "login.html";
+      window.location.href = "https://lamp-login-dl7a.vercel.app";
     });
   }
 
   if (registerBtn) {
     registerBtn.addEventListener("click", () => {
-      window.location.href = "register.html";
+      window.location.href = "https://lamp-login-dl7a.vercel.app";
     });
   }
 
@@ -121,17 +112,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function runSearch() {
     const search = searchInput.value.toLowerCase();
-    const cards = document.querySelectorAll(".manga-card");
 
-    cards.forEach((card) => {
+    document.querySelectorAll(".manga-card").forEach((card) => {
       const title = card.querySelector("h4").textContent.toLowerCase();
       card.style.display = title.includes(search) ? "" : "none";
     });
   }
 
-  if (searchBtn) {
-    searchBtn.addEventListener("click", runSearch);
-  }
+  if (searchBtn) searchBtn.addEventListener("click", runSearch);
 
   if (searchInput) {
     searchInput.addEventListener("keyup", (e) => {
@@ -139,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ===== СБРОС ФИЛЬТРОВ ===== */
+  /* ===== СБРОС ===== */
 
   const resetBtn = document.getElementById("resetFilters");
 
@@ -157,8 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ===== СБРОС ТИПА ===== */
-
   const resetTypeBtn = document.getElementById("resetTypeFilters");
 
   if (resetTypeBtn) {
@@ -170,35 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".manga-card").forEach((card) => {
         card.style.display = "";
       });
-    });
-  }
-
-  /* ===== HERO ===== */
-
-  const heroRead = document.getElementById("heroRead");
-
-  if (heroRead) {
-    heroRead.addEventListener("click", async () => {
-      const mangaId = "69aa909613e31010a5f1a317";
-
-      const res = await fetch(
-        `https://manga-site-er5s.onrender.com/chapters/${mangaId}`,
-      );
-
-      const chapters = await res.json();
-
-      if (chapters.length > 0) {
-        const firstChapter = chapters[0]._id;
-        window.location.href = `reader.html?chapter=${firstChapter}`;
-      }
-    });
-  }
-
-  const heroInfo = document.getElementById("heroInfo");
-
-  if (heroInfo) {
-    heroInfo.addEventListener("click", () => {
-      window.location.href = "manga.html?id=69aa909613e31010a5f1a317";
     });
   }
 
@@ -220,3 +177,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+/* ===== DEBUG ===== */
+
+const user = localStorage.getItem("username");
+
+if (user) {
+  console.log("Ты вошла как:", user);
+}

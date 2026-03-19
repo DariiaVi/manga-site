@@ -36,11 +36,13 @@ if (loginBtn) {
 
       console.log("SAVE USER:", data.username);
 
+      // ✅ сохраняем пользователя
       localStorage.setItem("username", data.username);
 
       alert("Вход выполнен");
 
-      window.location.href = "/";
+      // 🔥 ГЛАВНОЕ ИЗМЕНЕНИЕ — редирект
+      window.location.href = `/?user=${data.username}`;
     } catch (err) {
       alert("Ошибка соединения с сервером");
       console.error(err);

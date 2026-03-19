@@ -98,7 +98,7 @@ export default function App() {
     localStorage.setItem("username", data.username);
 
     /* переход на сайт */
-    window.location.href = `http://localhost:5500/index.html?user=${data.username}`;
+    window.location.href = `https://lamp-login-dl7a.vercel.app/?user=${data.username}`;
   }
 
   async function handleRegister() {
