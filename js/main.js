@@ -76,7 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     userBox.innerHTML = `
       <span class="user-name">Привет, ${username} 💜</span>
-      <button id="logoutBtn">Выйти</button>
+      const logoutBtn = document.getElementById("logoutBtn");
+       if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("username");
+      // 💥 обновляем страницу
+    window.location.repload();
+  });
+}
     `;
 
     authBlock.appendChild(userBox);
@@ -185,3 +192,11 @@ const user = localStorage.getItem("username");
 if (user) {
   console.log("Ты вошла как:", user);
 }
+document.addEventListener("click", (e) => {
+  if (e.target.id === "logoutBtn") {
+    console.log("LOGOUT CLICK"); // проверка
+
+    localStorage.removeItem("username");
+    window.location.reload();
+  }
+});
