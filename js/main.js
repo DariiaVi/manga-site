@@ -84,13 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.id = "logoutBtn";
     logoutBtn.textContent = "Выйти";
 
-    logoutBtn.addEventListener("click", () => {
-      console.log("CLICK WORKS ✅");
-
-      localStorage.removeItem("username");
-      window.location.href = "/";
-    });
-
     userBox.appendChild(span);
     userBox.appendChild(logoutBtn);
     authBlock.appendChild(userBox);

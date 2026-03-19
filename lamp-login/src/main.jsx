@@ -4,3 +4,8 @@ import "./index.css";
 import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(<App />);
+{
+  localStorage.getItem("username") && (
+    <button onClick={handleLogout}>Выйти</button>
+  );
+}

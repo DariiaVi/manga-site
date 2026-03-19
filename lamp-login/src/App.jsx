@@ -36,13 +36,26 @@ function Lamp({ toggle, lightOn }) {
 
 export default function App() {
   const [lightOn, setLightOn] = useState(false);
-
   const [isRegister, setIsRegister] = useState(false);
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const mainLight = useRef();
+
+  /* ===== АВТОЛОГИН ===== */
+  const savedUser = localStorage.getItem("username");
+
+  /* ===== LOGOUT ===== */
+  function handleLogout() {
+    console.log("LOGOUT WORKS ✅");
+
+    localStorage.removeItem("username");
+
+    // убираем ?user=
+    window.history.replaceState({}, document.title, "/");
+
+    window.location.href = "/";
+  }
 
   function toggleLamp() {
     const state = !lightOn;
@@ -59,7 +72,6 @@ export default function App() {
         opacity: 1,
         scale: 1.1,
         duration: 0.6,
-        transformOrigin: "center",
       });
     } else {
       gsap.to(mainLight.current, {
@@ -94,10 +106,8 @@ export default function App() {
       return;
     }
 
-    /* сохраняем пользователя */
     localStorage.setItem("username", data.username);
 
-    /* переход на сайт */
     window.location.href = `https://manga-site-er5s.onrender.com/?user=${data.username}`;
   }
 
@@ -125,7 +135,6 @@ export default function App() {
       }
 
       alert("Регистрация успешна");
-
       setIsRegister(false);
     } catch (err) {
       console.error(err);
@@ -160,44 +169,51 @@ export default function App() {
         </Suspense>
 
         <EffectComposer>
-          <Bloom
-            intensity={0.2}
-            luminanceThreshold={0.85}
-            luminanceSmoothing={0.9}
-          />
+          <Bloom intensity={0.2} luminanceThreshold={0.85} />
         </EffectComposer>
       </Canvas>
 
       <div className="hintText">Нажмите на верёвку</div>
-
       <div className="hintCircle"></div>
 
       <div className="loginForm">
-        <h2>{isRegister ? "Регистрация" : "Вход"}</h2>
+        {/* 🔥 ЕСЛИ ЗАЛОГИНЕН */}
+        {savedUser ? (
+          <>
+            <h2>Привет, {savedUser} 💜</h2>
+            <button onClick={handleLogout}>Выйти</button>
+          </>
+        ) : (
+          <>
+            <h2>{isRegister ? "Регистрация" : "Вход"}</h2>
 
-        <input
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+            <input
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
 
-        <input
-          type="password"
-          placeholder="Пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+            <input
+              type="password"
+              placeholder="Пароль"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-        <button onClick={isRegister ? handleRegister : handleLogin}>
-          {isRegister ? "Зарегистрироваться" : "Войти"}
-        </button>
+            <button onClick={isRegister ? handleRegister : handleLogin}>
+              {isRegister ? "Зарегистрироваться" : "Войти"}
+            </button>
 
-        <p
-          style={{ cursor: "pointer", textAlign: "center" }}
-          onClick={() => setIsRegister(!isRegister)}
-        >
-          {isRegister ? "Уже есть аккаунт? Войти" : "Нет аккаунта? Регистрация"}
-        </p>
+            <p
+              style={{ cursor: "pointer", textAlign: "center" }}
+              onClick={() => setIsRegister(!isRegister)}
+            >
+              {isRegister
+                ? "Уже есть аккаунт? Войти"
+                : "Нет аккаунта? Регистрация"}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
