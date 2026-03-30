@@ -2,6 +2,8 @@ const container = document.getElementById("collectionsContainer");
 const createBtn = document.getElementById("createCollectionBtn");
 const input = document.getElementById("collectionName");
 
+/* ===== ЗАГРУЗКА КОЛЛЕКЦИЙ ===== */
+
 async function loadCollections() {
   const username = localStorage.getItem("username");
 
@@ -10,78 +12,119 @@ async function loadCollections() {
     return;
   }
 
-  const res = await fetch(
-    `https://manga-site-er5s.onrender.com/collections/${username}`,
-  );
-  const collections = await res.json();
+  try {
+    // 🔥 получаем коллекции
+    const res = await fetch(
+      `https://manga-site-er5s.onrender.com/collections/${username}`,
+    );
 
-  const mangaRes = await fetch("https://manga-site-er5s.onrender.com/mangas");
-  const mangas = await mangaRes.json();
+    const collections = await res.json();
+    console.log("Коллекции:", collections);
 
-  container.innerHTML = "";
+    // 🔥 получаем все манги
+    const mangaRes = await fetch("https://manga-site-er5s.onrender.com/mangas");
 
-  collections.forEach((collection) => {
-    const block = document.createElement("div");
-    block.className = "collection-block";
+    const mangas = await mangaRes.json();
+    console.log("Манги:", mangas);
 
-    const title = document.createElement("h2");
-    title.textContent = collection.name;
+    container.innerHTML = "";
 
-    const cards = document.createElement("div");
-    cards.className = "collection-row";
+    // ❗ если нет коллекций
+    if (!collections.length) {
+      container.innerHTML = "<p>У вас пока нет коллекций</p>";
+      return;
+    }
 
-    collection.mangas.forEach((id) => {
-      const manga = mangas.find((m) => String(m._id) === String(id));
-      if (!manga) return;
+    collections.forEach((collection) => {
+      const block = document.createElement("div");
+      block.className = "collection-block";
 
-      const card = document.createElement("div");
-      card.className = "manga-card";
+      const title = document.createElement("h2");
+      title.textContent = collection.name;
 
-      card.innerHTML = `
-        <img src="https://manga-site-er5s.onrender.com${manga.cover}" />
+      const cards = document.createElement("div");
+      cards.className = "collection-row";
 
-        <div class="card-info">
-          <h4>${manga.title}</h4>
-          <span>${manga.type}</span>
+      // ❗ если коллекция пустая
+      if (!collection.mangas || collection.mangas.length === 0) {
+        cards.innerHTML = "<p>Пока пусто</p>";
+      } else {
+        collection.mangas.forEach((id) => {
+          // 💥 ФИКС ID
+          const manga = mangas.find((m) => String(m._id) === String(id));
 
-          <button onclick="location.href='manga.html?id=${manga._id}'">
-          Читать
-          </button>
-        </div>
-      `;
+          if (!manga) return;
 
-      cards.appendChild(card);
+          const card = document.createElement("div");
+          card.className = "manga-card";
+
+          card.innerHTML = `
+            <img src="https://manga-site-er5s.onrender.com${manga.cover}" />
+
+            <div class="card-info">
+              <h4>${manga.title}</h4>
+              <span>${manga.type}</span>
+
+              <button onclick="location.href='manga.html?id=${manga._id}'">
+                Читать
+              </button>
+            </div>
+          `;
+
+          cards.appendChild(card);
+        });
+      }
+
+      block.appendChild(title);
+      block.appendChild(cards);
+
+      container.appendChild(block);
     });
-
-    block.appendChild(title);
-    block.appendChild(cards);
-
-    container.appendChild(block);
-  });
+  } catch (err) {
+    console.error("Ошибка загрузки коллекций:", err);
+    container.innerHTML = "<p>Ошибка загрузки</p>";
+  }
 }
+
+/* ===== СОЗДАНИЕ КОЛЛЕКЦИИ ===== */
 
 createBtn.addEventListener("click", async () => {
   const username = localStorage.getItem("username");
   const name = input.value.trim();
 
-  if (!name) return;
+  if (!name) {
+    alert("Введите название коллекции");
+    return;
+  }
 
-  await fetch("https://manga-site-er5s.onrender.com/collections/create", {
-    method: "POST",
+  try {
+    const res = await fetch(
+      "https://manga-site-er5s.onrender.com/collections/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          name,
+        }),
+      },
+    );
 
-    headers: {
-      "Content-Type": "application/json",
-    },
+    const data = await res.json();
+    console.log("Создание:", data);
 
-    body: JSON.stringify({
-      username,
-      name,
-    }),
-  });
+    input.value = "";
 
-  input.value = "";
-
-  loadCollections();
+    // 🔥 перезагрузка коллекций
+    loadCollections();
+  } catch (err) {
+    console.error("Ошибка создания:", err);
+    alert("Ошибка создания коллекции");
+  }
 });
+
+/* ===== СТАРТ ===== */
 
 loadCollections();
