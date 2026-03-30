@@ -199,7 +199,22 @@ app.get("/mangas", async (req, res) => {
     res.status(500).json({ error: "Ошибка загрузки манги" });
   }
 });
+app.get("/favorites/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
 
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.json([]);
+    }
+
+    res.json(user.favorites || []);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
 /* ======================
 ADD CHAPTER
 ====================== */
