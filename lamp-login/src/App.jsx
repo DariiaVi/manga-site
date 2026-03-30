@@ -55,8 +55,7 @@ export default function App() {
   const mainLight = useRef();
 
   /* ===== АВТОЛОГИН ===== */
-  const savedUser = localStorage.getItem("username");
-
+  const [savedUser, setSavedUser] = useState(localStorage.getItem("username"));
   /* ===== LOGOUT ===== */
   function handleLogout() {
     console.log("LOGOUT WORKS ✅");

@@ -18,29 +18,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const username = localStorage.getItem("username");
 
   /* ===== ФИЛЬТРЫ ===== */
-
+  const typeFilters = document.querySelectorAll(".type-filter");
   const genreFilters = document.querySelectorAll(".genre-filter");
 
   genreFilters.forEach((filter) => {
     filter.addEventListener("change", applyFilters);
   });
-
+  typeFilters.forEach((filter) => {
+    filter.addEventListener("change", applyFilters);
+  });
   function applyFilters() {
     const selectedGenres = [...genreFilters]
       .filter((g) => g.checked)
       .map((g) => g.value.toLowerCase());
 
+    const selectedTypes = [...typeFilters]
+      .filter((t) => t.checked)
+      .map((t) => t.value.toLowerCase());
+
     document.querySelectorAll(".manga-card").forEach((card) => {
       const genres = card.querySelector(".genres").textContent.toLowerCase();
 
-      const match =
+      // 👇 ВОТ ЭТА ЧАСТЬ НОВАЯ
+      const typeElement = card.querySelector(".type");
+      const type = typeElement
+        ? typeElement.textContent.trim().toLowerCase()
+        : "";
+      const matchGenres =
         selectedGenres.length === 0 ||
         selectedGenres.every((g) => genres.includes(g));
+
+      const matchTypes =
+        selectedTypes.length === 0 || selectedTypes.includes(type);
+
+      const match = matchGenres && matchTypes;
 
       card.style.display = match ? "" : "none";
     });
   }
-
   /* ===== RANDOM MANGA ===== */
 
   const randomBtn = document.getElementById("randomMangaBtn");
@@ -117,6 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
     registerBtn.addEventListener("click", () => {
       window.location.href = "https://lamp-login-dl7a.vercel.app";
     });
+  }
+  function handleLogout() {
+    localStorage.removeItem("username"); // или "username" — смотри как у тебя называется
+    window.location.reload();
   }
 
   /* ===== ПОИСК ===== */
