@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
-  favorites: [String],
+  favorites: [
+    {
+      type: String,
+    },
+  ],
   readingList: [
     {
       mangaId: String,
