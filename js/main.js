@@ -40,10 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const genres = card.querySelector(".genres").textContent.toLowerCase();
 
       // 👇 ВОТ ЭТА ЧАСТЬ НОВАЯ
-      const typeElement = card.querySelector(".type");
-      const type = typeElement
-        ? typeElement.textContent.trim().toLowerCase()
-        : "";
+      const type = card.dataset.type;
       const matchGenres =
         selectedGenres.length === 0 ||
         selectedGenres.every((g) => genres.includes(g));
@@ -55,6 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       card.style.display = match ? "" : "none";
     });
+    console.log("selectedTypes:", selectedTypes);
+    console.log("card type:", type);
   }
   /* ===== RANDOM MANGA ===== */
 
