@@ -31,8 +31,7 @@ async function loadCollections() {
     cards.className = "collection-row";
 
     collection.mangas.forEach((id) => {
-      const manga = mangas.find((m) => m._id === id);
-
+      const manga = mangas.find((m) => String(m._id) === String(id));
       if (!manga) return;
 
       const card = document.createElement("div");
