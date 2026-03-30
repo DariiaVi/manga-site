@@ -215,6 +215,17 @@ app.get("/favorites/:username", async (req, res) => {
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
+app.get("/collections/:username", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+
+    if (!user) return res.json([]);
+
+    res.json(user.collections || []);
+  } catch (err) {
+    res.status(500).json({ error: "Ошибка" });
+  }
+});
 /* ======================
 ADD CHAPTER
 ====================== */
