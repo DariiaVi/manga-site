@@ -186,17 +186,30 @@ app.post("/mangas/add", uploadCover.single("cover"), async (req, res) => {
     res.status(500).json({ error: "Ошибка добавления манги" });
   }
 });
-
 /* ======================
-GET ALL MANGAS
+FAVORITES
 ====================== */
-
-app.get("/mangas", async (req, res) => {
+app.post("/favorites/add", async (req, res) => {
   try {
-    const mangas = await Manga.find();
-    res.json(mangas);
-  } catch (error) {
-    res.status(500).json({ error: "Ошибка загрузки манги" });
+    const { username, mangaId } = req.body;
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    // ❗ чтобы не добавлялось дважды
+    if (!user.favorites.includes(mangaId)) {
+      user.favorites.push(mangaId);
+    }
+
+    await user.save();
+
+    res.json({ message: "Добавлено в избранное" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка сервера" });
   }
 });
 app.get("/favorites/:username", async (req, res) => {
@@ -215,6 +228,19 @@ app.get("/favorites/:username", async (req, res) => {
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
+/* ======================
+GET ALL MANGAS
+====================== */
+
+app.get("/mangas", async (req, res) => {
+  try {
+    const mangas = await Manga.find();
+    res.json(mangas);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка загрузки манги" });
+  }
+});
+
 app.get("/collections/:username", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
