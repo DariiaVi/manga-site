@@ -12,8 +12,7 @@ async function loadManga() {
     const res = await fetch(`${API}/mangas`);
     const mangas = await res.json();
 
-    const manga = mangas.find((m) => m._id === mangaId);
-
+    const manga = mangas.find((m) => String(m._id) === String(mangaId));
     if (!manga) {
       document.body.innerHTML = "<h2>Манга не найдена</h2>";
       return;
@@ -93,7 +92,7 @@ if (favBtn) {
       alert("Нужно войти");
       return;
     }
-
+    console.log("fav id:", mangaId);
     await fetch(`${API}/favorites/add`, {
       method: "POST",
       headers: {
@@ -113,7 +112,7 @@ if (favBtn) {
 ADD TO COLLECTION
 ====================== */
 
-window.addToCollection = async function () {
+window.addToCollection = async function (id = mangaId) {
   const username = localStorage.getItem("username");
 
   if (!username) {
@@ -125,6 +124,8 @@ window.addToCollection = async function () {
 
   if (!collectionName) return;
 
+  console.log("Добавляем:", id);
+
   await fetch(`${API}/collections/add`, {
     method: "POST",
     headers: {
@@ -133,7 +134,7 @@ window.addToCollection = async function () {
     body: JSON.stringify({
       username,
       collectionName,
-      mangaId,
+      mangaId: id,
     }),
   });
 
