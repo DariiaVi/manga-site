@@ -253,6 +253,68 @@ app.get("/collections/:username", async (req, res) => {
   }
 });
 /* ======================
+READING ADD
+====================== */
+app.post("/reading/add", async (req, res) => {
+  try {
+    const { username, mangaId, status } = req.body;
+
+    console.log("READING ADD:", username, mangaId, status);
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    // если нет списка — создаём
+    if (!user.readingList) {
+      user.readingList = {
+        reading: [],
+        planned: [],
+        completed: [],
+        dropped: [],
+      };
+    }
+
+    // ❗ удаляем мангу из всех категорий
+    Object.keys(user.readingList).forEach((key) => {
+      user.readingList[key] = user.readingList[key].filter(
+        (id) => id !== mangaId,
+      );
+    });
+
+    // ✅ добавляем в нужную категорию
+    user.readingList[status].push(mangaId);
+
+    await user.save();
+
+    res.json({ message: "Добавлено в список" });
+  } catch (err) {
+    console.error("READING ERROR:", err);
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+app.get("/reading/:username", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+
+    if (!user || !user.readingList) {
+      return res.json({
+        reading: [],
+        planned: [],
+        completed: [],
+        dropped: [],
+      });
+    }
+
+    res.json(user.readingList);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+/* ======================
 CREATE COLLECTIONS
 ====================== */
 app.post("/collections/create", async (req, res) => {

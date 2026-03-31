@@ -8,13 +8,12 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   ],
-  readingList: [
-    {
-      mangaId: String,
-      status: String,
-      progress: Number,
-    },
-  ],
+  readingList: {
+    reading: [String],
+    planned: [String],
+    completed: [String],
+    dropped: [String],
+  },
   collections: [
     {
       name: String,
