@@ -253,6 +253,75 @@ app.get("/collections/:username", async (req, res) => {
   }
 });
 /* ======================
+CREATE COLLECTIONS
+====================== */
+app.post("/collections/create", async (req, res) => {
+  try {
+    const { username, name } = req.body;
+
+    console.log("CREATE COLLECTION:", username, name);
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    if (!user.collections) {
+      user.collections = [];
+    }
+
+    // ❗ проверка на дубликат
+    const exists = user.collections.find((c) => c.name === name);
+
+    if (exists) {
+      return res.json({ message: "Коллекция уже есть" });
+    }
+
+    user.collections.push({
+      name,
+      mangas: [],
+    });
+
+    await user.save();
+
+    res.json({ message: "Коллекция создана" });
+  } catch (err) {
+    console.error("CREATE COLLECTION ERROR:", err);
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+app.post("/collections/add", async (req, res) => {
+  try {
+    const { username, collectionName, mangaId } = req.body;
+
+    console.log("ADD TO COLLECTION:", username, collectionName, mangaId);
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    const collection = user.collections.find((c) => c.name === collectionName);
+
+    if (!collection) {
+      return res.status(404).json({ message: "Коллекция не найдена" });
+    }
+
+    if (!collection.mangas.includes(mangaId)) {
+      collection.mangas.push(mangaId);
+    }
+
+    await user.save();
+
+    res.json({ message: "Манга добавлена в коллекцию" });
+  } catch (err) {
+    console.error("ADD COLLECTION ERROR:", err);
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+/* ======================
 ADD CHAPTER
 ====================== */
 
