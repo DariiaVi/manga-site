@@ -353,33 +353,45 @@ app.post("/collections/create", async (req, res) => {
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
-app.post("/collections/add", async (req, res) => {
+app.post("/collections/create", async (req, res) => {
   try {
-    const { username, collectionName, mangaId } = req.body;
+    const { username, name } = req.body;
 
-    console.log("ADD TO COLLECTION:", username, collectionName, mangaId);
+    console.log("CREATE:", username, name);
+
+    if (!username || !name) {
+      return res.status(400).json({ error: "Нет данных" });
+    }
 
     const user = await User.findOne({ username });
 
     if (!user) {
-      return res.status(404).json({ message: "Пользователь не найден" });
+      return res.status(404).json({ error: "Пользователь не найден" });
     }
 
-    const collection = user.collections.find((c) => c.name === collectionName);
-
-    if (!collection) {
-      return res.status(404).json({ message: "Коллекция не найдена" });
+    // 💥 ВОТ ГЛАВНЫЙ ФИКС
+    if (!Array.isArray(user.collections)) {
+      user.collections = [];
     }
 
-    if (!collection.mangas.includes(mangaId)) {
-      collection.mangas.push(mangaId);
+    const exists = user.collections.find(
+      (c) => c.name.toLowerCase() === name.toLowerCase(),
+    );
+
+    if (exists) {
+      return res.json({ message: "Уже есть" });
     }
+
+    user.collections.push({
+      name,
+      mangas: [],
+    });
 
     await user.save();
 
-    res.json({ message: "Манга добавлена в коллекцию" });
+    res.json({ message: "Коллекция создана" });
   } catch (err) {
-    console.error("ADD COLLECTION ERROR:", err);
+    console.error("CREATE ERROR:", err);
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
